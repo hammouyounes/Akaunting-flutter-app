@@ -11,6 +11,8 @@ use App\Utilities\Widgets;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+define('App\Utilities\AKAUNTING_PHP', '8.1.0');
+
 if (! function_exists('user')) {
     /**
      * Get the authenticated user.
@@ -39,7 +41,9 @@ if (! function_exists('company_date_format')) {
      */
     function company_date_format(): string
     {
-        $date_time = new class() { use DateTime; };
+        $date_time = new class() {
+            use DateTime;
+        };
 
         return $date_time->getCompanyDateFormat();
     }
@@ -97,7 +101,9 @@ if (! function_exists('module_is_enabled')) {
      */
     function module_is_enabled(string $alias): bool
     {
-        $module = new class() { use Modules; };
+        $module = new class() {
+            use Modules;
+        };
 
         return $module->moduleIsEnabled($alias);
     }
@@ -149,7 +155,9 @@ if (! function_exists('source_name')) {
      */
     function source_name(string|null $alias = null): string
     {
-        $tmp = new class() { use Sources; };
+        $tmp = new class() {
+            use Sources;
+        };
 
         return $tmp->getSourceName(null, $alias);
     }
@@ -173,7 +181,7 @@ if (! function_exists('array_values_recursive')) {
     {
         $flat = [];
 
-        foreach($array as $value) {
+        foreach ($array as $value) {
             if (is_array($value)) {
                 $flat = array_merge($flat, array_values_recursive($value));
             } else {
@@ -333,8 +341,8 @@ if (! function_exists('get_storage_path')) {
     function get_storage_path(string $path = ''): string
     {
         return is_local_storage()
-                ? storage_path($path)
-                : Storage::path($path);
+            ? storage_path($path)
+            : Storage::path($path);
     }
 }
 
@@ -362,7 +370,9 @@ if (! function_exists('team_model_class')) {
 if (! function_exists('search_string_value')) {
     function search_string_value(string $name, string $default = '', string $input = ''): string|array
     {
-        $search = new class() { use SearchString; };
+        $search = new class() {
+            use SearchString;
+        };
 
         return $search->getSearchStringValue($name, $default, $input);
     }
@@ -371,7 +381,9 @@ if (! function_exists('search_string_value')) {
 if (! function_exists('is_cloud')) {
     function is_cloud(): bool
     {
-        $cloud = new class() { use Cloud; };
+        $cloud = new class() {
+            use Cloud;
+        };
 
         return $cloud->isCloud();
     }
