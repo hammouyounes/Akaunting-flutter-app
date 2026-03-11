@@ -17,6 +17,9 @@ class AuthInterceptor extends Interceptor {
   /// Storage key that [ApiAuthRepository] uses to persist the Sanctum token.
   static const _tokenKey = 'auth_token';
 
+  /// Storage key for the active company ID (saved during login).
+  static const _companyKey = 'company_id';
+
   /// Paths that should **not** carry the Authorization header (e.g. login)
   /// to avoid circular 401 loops.
   static const _publicPaths = <String>[
@@ -30,7 +33,8 @@ class AuthInterceptor extends Interceptor {
   // ─── Request ────────────────────────────────────────────────────────────────
 
   /// Reads the stored Sanctum token and sets it as a Bearer token on the
-  /// `Authorization` header, unless the request targets a public endpoint.
+  /// `Authorization` header, and attaches the `X-Company` header so the
+  /// backend resolves the correct company context for permission checks.
   @override
   Future<void> onRequest(
     RequestOptions options,
@@ -42,6 +46,12 @@ class AuthInterceptor extends Interceptor {
       final token = await _storage.read(key: _tokenKey);
       if (token != null && token.isNotEmpty) {
         options.headers['Authorization'] = 'Bearer $token';
+      }
+
+      // Attach the company ID required by Akaunting's API.
+      final companyId = await _storage.read(key: _companyKey);
+      if (companyId != null && companyId.isNotEmpty) {
+        options.headers['X-Company'] = companyId;
       }
     }
 

@@ -4,6 +4,9 @@ import 'package:get_it/get_it.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
 import '../../data/repositories/auth_repository.dart' as api;
 import '../../logic/cubits/auth_cubit.dart';
+import '../../features/accounts/domain/repositories/account_repository.dart';
+import '../../features/accounts/data/repositories/account_repository.dart';
+import '../../logic/cubits/account_cubit.dart';
 import '../network/api_client.dart';
 import '../network/auth_interceptor.dart';
 
@@ -36,6 +39,15 @@ Future<void> init() async {
 
   sl.registerLazySingleton<AuthCubit>(
     () => AuthCubit(authRepository: sl<AuthRepository>()),
+  );
+
+  // Accounts
+  sl.registerLazySingleton<AccountRepository>(
+    () => ApiAccountRepository(dio: sl<ApiClient>().dio),
+  );
+
+  sl.registerFactory<AccountCubit>(
+    () => AccountCubit(accountRepository: sl<AccountRepository>()),
   );
 
 }

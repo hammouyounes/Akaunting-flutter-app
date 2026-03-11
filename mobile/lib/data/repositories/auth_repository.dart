@@ -11,6 +11,7 @@ class ApiAuthRepository implements AuthRepository {
 
   static const _tokenKey = 'auth_token';
   static const _userKey = 'auth_user';
+  static const companyKey = 'company_id';
 
   ApiAuthRepository({required Dio dio, FlutterSecureStorage? storage})
       : _dio = dio,
@@ -69,6 +70,13 @@ Future<UserModel> loginWithCredentials(String email, String password) async {
 
     await _saveToken(token);
 
+    // Persist the first company ID so the auth interceptor can send X-Company.
+    final companies = dataMap?['user']?['companies'] as List<dynamic>?;
+    if (companies != null && companies.isNotEmpty) {
+      final companyId = companies[0]['id'];
+      await _storage.write(key: companyKey, value: companyId.toString());
+    }
+
     // Extract user object from the same 'data' map
     final userJson = dataMap?['user'] as Map<String, dynamic>?;
 
@@ -106,6 +114,7 @@ Future<UserModel> loginWithCredentials(String email, String password) async {
     } finally {
       await _clearToken();
       await _storage.delete(key: _userKey);
+      await _storage.delete(key: companyKey);
     }
   }
 
