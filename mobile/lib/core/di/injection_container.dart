@@ -14,6 +14,18 @@ import '../../domain/repositories/transfer_repository.dart';
 import '../../domain/repositories/transaction_repository.dart';
 import '../../features/transfers/presentation/cubit/transfer_cubit.dart';
 import '../../features/transactions/presentation/cubit/transaction_cubit.dart';
+import '../../features/reports/domain/repositories/report_repository.dart';
+import '../../features/reports/presentation/cubit/report_cubit.dart';
+import '../../features/categories/domain/repositories/category_repository.dart';
+import '../../features/categories/presentation/cubit/category_cubit.dart';
+import '../../features/currencies/domain/repositories/currency_repository.dart';
+import '../../features/currencies/presentation/cubit/currency_cubit.dart';
+import '../../features/taxes/domain/repositories/tax_repository.dart';
+import '../../features/taxes/presentation/cubit/tax_cubit.dart';
+import '../../features/settings/domain/repositories/setting_repository.dart';
+import '../../features/settings/presentation/cubit/setting_cubit.dart';
+import '../../features/translations/domain/repositories/translation_repository.dart';
+import '../../features/translations/presentation/cubit/translation_cubit.dart';
 import '../network/api_client.dart';
 import '../network/auth_interceptor.dart';
 
@@ -63,24 +75,49 @@ Future<void> init() async {
   );
 
   sl.registerFactory<ReconciliationCubit>(
-    () => ReconciliationCubit(reconciliationRepository: sl<ReconciliationRepository>()),
+    () => ReconciliationCubit(
+      reconciliationRepository: sl<ReconciliationRepository>(),
+    ),
   );
 
   // Transfers
-  sl.registerLazySingleton<TransferRepository>(
-    () => TransferRepository(),
-  );
+  sl.registerLazySingleton<TransferRepository>(() => TransferRepository());
 
-  sl.registerFactory<TransferCubit>(
-    () => TransferCubit(),
-  );
+  sl.registerFactory<TransferCubit>(() => TransferCubit());
 
   // Transactions
   sl.registerLazySingleton<TransactionRepository>(
     () => TransactionRepository(),
   );
 
-  sl.registerFactory<TransactionCubit>(
-    () => TransactionCubit(),
+  sl.registerFactory<TransactionCubit>(() => TransactionCubit());
+
+  // Reports
+  sl.registerLazySingleton<ReportRepository>(
+    () => ReportRepository(apiClient: sl<ApiClient>()),
   );
+
+  sl.registerFactory<ReportCubit>(
+    () => ReportCubit(repository: sl<ReportRepository>()),
+  );
+
+  // Categories (Dev 4)
+  sl.registerLazySingleton<CategoryRepository>(() => CategoryRepository());
+  sl.registerFactory<CategoryCubit>(() => CategoryCubit());
+
+  // Currencies (Dev 4)
+  sl.registerLazySingleton<CurrencyRepository>(() => CurrencyRepository());
+  sl.registerFactory<CurrencyCubit>(() => CurrencyCubit());
+
+  // Taxes (Dev 4)
+  sl.registerLazySingleton<TaxRepository>(() => TaxRepository());
+  sl.registerFactory<TaxCubit>(() => TaxCubit());
+
+  // Settings (Dev 4)
+  sl.registerLazySingleton<SettingRepository>(() => SettingRepository());
+  sl.registerFactory<SettingCubit>(() => SettingCubit());
+
+  // Translations (Dev 4)
+  sl.registerLazySingleton<TranslationRepository>(() => TranslationRepository());
+  sl.registerFactory<TranslationCubit>(() => TranslationCubit());
 }
