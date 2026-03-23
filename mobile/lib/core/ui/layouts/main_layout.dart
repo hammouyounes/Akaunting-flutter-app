@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../../features/accounts/presentation/pages/accounts_list_page.dart';
-import '../../../../features/items/presentation/pages/items_list_page.dart';
-import '../../../../features/reconciliations/presentation/pages/reconciliations_list_page.dart';
-import '../../../../features/transfers/presentation/pages/transfers_list_page.dart';
-import '../../../../features/transactions/presentation/pages/transactions_list_page.dart';
+import '../../../features/items/presentation/pages/items_list_page.dart';
+import '../../../features/banking/presentation/pages/banking_hub_page.dart';
+import '../../../features/reports/presentation/pages/reports_list_page.dart';
+import '../../../features/settings_hub/presentation/pages/settings_hub_page.dart';
+import '../../../features/dashboard/presentation/pages/dashboard_page.dart';
+import '../components/app_drawer.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -14,59 +15,63 @@ class MainLayout extends StatefulWidget {
 
 class _MainLayoutState extends State<MainLayout> {
   int _currentIndex = 0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final List<Widget> _pages = [
-    const Center(child: Text('Dashboard Placeholder')),
-    const ItemsListPage(), // Developer 2 tasks
-    const AccountsListPage(), // Developer 3 tasks
-    const ReconciliationsListPage(),
-    const TransfersListPage(),
-    const TransactionsListPage(),
-    const Center(child: Text('Settings Placeholder')),
+    const DashboardPage(),
+    const ItemsListPage(),
+    const BankingHubPage(),
+    const ReportsListPage(),
+    const SettingsHubPage(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: IndexedStack(
         index: _currentIndex,
         children: _pages,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
+      drawer: AppDrawer(
         currentIndex: _currentIndex,
-        onTap: (index) {
+        onTabSelected: (index) {
           setState(() {
             _currentIndex = index;
           });
         },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
+      ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.speed_outlined),
+            selectedIcon: Icon(Icons.speed),
             label: 'Dashboard',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.inventory_2),
+          NavigationDestination(
+            icon: Icon(Icons.inventory_2_outlined),
+            selectedIcon: Icon(Icons.inventory_2),
             label: 'Items',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_wallet),
-            label: 'Accounts',
+          NavigationDestination(
+            icon: Icon(Icons.account_balance_outlined),
+            selectedIcon: Icon(Icons.account_balance),
+            label: 'Banking',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.receipt_long),
-            label: 'Reconciliations',
+          NavigationDestination(
+            icon: Icon(Icons.bar_chart_outlined),
+            selectedIcon: Icon(Icons.bar_chart),
+            label: 'Reports',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.compare_arrows),
-            label: 'Transfers',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.swap_horiz),
-            label: 'Transactions',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+          NavigationDestination(
+            icon: Icon(Icons.settings_outlined),
+            selectedIcon: Icon(Icons.settings),
             label: 'Settings',
           ),
         ],
@@ -74,4 +79,3 @@ class _MainLayoutState extends State<MainLayout> {
     );
   }
 }
-
