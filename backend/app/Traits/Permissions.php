@@ -438,6 +438,14 @@ trait Permissions
             // Look for type in search variable like api/contacts?search=type:customer
             $type = $this->getSearchStringValue('type');
 
+            if (empty($type)) {
+                $type = request('type');
+            }
+
+            if (empty($type) && ($id = request()->segment(3)) && is_numeric($id)) {
+                $type = \Illuminate\Support\Facades\DB::table('contacts')->where('id', $id)->value('type');
+            }
+
             if (! empty($type)) {
                 $alias = config('type.' . Str::singular($table) . '.' . $type . '.alias');
                 $group = config('type.' . Str::singular($table) . '.' . $type . '.group');
