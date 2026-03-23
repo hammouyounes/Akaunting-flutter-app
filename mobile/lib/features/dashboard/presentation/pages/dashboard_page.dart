@@ -4,7 +4,9 @@ import '../../../companies/presentation/cubit/company_cubit.dart';
 import '../../../companies/presentation/widgets/company_switcher.dart';
 import '../../../profile/presentation/cubit/profile_cubit.dart';
 import '../../../profile/presentation/cubit/profile_state.dart';
+import '../../../auth/presentation/pages/auth_check_page.dart';
 import '../../../companies/presentation/pages/companies_list_page.dart';
+import '../../../../logic/cubits/auth_cubit.dart';
 import 'dashboards_list_page.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -245,6 +247,16 @@ class _DashboardPageState extends State<DashboardPage> {
                         ],
                       ],
                     ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.logout, color: Colors.red),
+                    onPressed: () {
+                      context.read<AuthCubit>().logout();
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (_) => const AuthCheckPage()),
+                        (route) => false,
+                      );
+                    },
                   ),
                 ],
               ),

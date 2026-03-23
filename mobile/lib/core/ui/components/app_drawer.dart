@@ -69,9 +69,14 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 8),
+            // Scrollable list of items
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 8),
 
-            // Dashboard
+                    // Dashboard
             _DrawerItem(
               icon: Icons.speed,
               label: 'Dashboard',
@@ -195,7 +200,11 @@ class AppDrawer extends StatelessWidget {
               },
             ),
 
-            const Spacer(),
+                  ],
+                ),
+              ),
+            ),
+            
             const Divider(height: 1),
 
             // Logout
