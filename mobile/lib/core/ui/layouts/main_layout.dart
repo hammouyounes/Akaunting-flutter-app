@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../features/accounts/presentation/pages/accounts_list_page.dart';
+import '../../../../features/items/presentation/pages/items_list_page.dart';
 import '../../../../features/reconciliations/presentation/pages/reconciliations_list_page.dart';
 import '../../../../features/transfers/presentation/pages/transfers_list_page.dart';
 import '../../../../features/transactions/presentation/pages/transactions_list_page.dart';
@@ -16,6 +17,7 @@ class _MainLayoutState extends State<MainLayout> {
 
   final List<Widget> _pages = [
     const Center(child: Text('Dashboard Placeholder')),
+    const ItemsListPage(), // Developer 2 tasks
     const AccountsListPage(), // Developer 3 tasks
     const ReconciliationsListPage(),
     const TransfersListPage(),
@@ -42,6 +44,10 @@ class _MainLayoutState extends State<MainLayout> {
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard),
             label: 'Dashboard',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.inventory_2),
+            label: 'Items',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_balance_wallet),
